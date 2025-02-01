@@ -1,0 +1,2 @@
+add_library(LinearSystemSolver ThomasAlgorithm.cpp)
+target_include_directories(LinearSystemSolver PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
