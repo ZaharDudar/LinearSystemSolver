@@ -15,10 +15,12 @@ public:
     // T& operator()(int i, int j){ return matrix[i * nc + j];} //Проблема если где-то прописать vector.push_back(mtrx(i,j)), в вектор кажется добавится ссылка на элемент и его можно будет поменять оттуда 
     T operator()(int i, int j){ return matrix[i * nc + j];} 
     T operator()(int i, int j, int set_val){ return matrix[i * nc + j]=set_val;}
+    std::vector<T> operator*(std::vector<T>B);
     ~Matrix(){};
     static Matrix<T> create_diag_matrix(std::vector<T>);
     static Matrix<T> create_matrix_from_array(std::vector<T>, int, int);
     static Matrix<T> create_3diag_matrix(std::vector<T>,std::vector<T>,std::vector<T>);
+
 };
 
 //Create diagonal matrix from vector
@@ -64,4 +66,20 @@ Matrix<T> Matrix<T>::create_matrix_from_array(std::vector<T> a, int nr, int nc){
     tmp_matrix.nc = nc;
     tmp_matrix.nr = nr;
     return tmp_matrix;
+}
+
+template<typename T>
+std::vector<T> Matrix<T>::operator*(std::vector<T>B){
+    if(this->shape().second != B.size()) {std::cout<<"lenght row != length B"; throw 1;}
+    std::vector<T> result(this->shape().first);
+
+    T tmp_sum=0;
+    for(int i=0; i<this->shape().first; i++){
+        tmp_sum = 0;
+        for(int j=0; j<this->shape().second; j++){
+            tmp_sum += (*this)(i,j) * B[j];
+        }
+        result[i] = tmp_sum;
+    }
+    return result;
 }

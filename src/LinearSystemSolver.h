@@ -7,6 +7,7 @@
 
 #include <Matrix.h>
 #include <SCRMatrix.h>
+#include <VectorMath.h>
 
 
 //FIRST IND - ROW, SECOND IND - COLUMN

@@ -69,93 +69,31 @@ TEST(MatrixClass, MatrixFromArray) {
 	EXPECT_EQ(test_mtx(1,2), 6);
 }
 
-
-TEST(ThomasAlgorithm, Correct) {
-	std::vector<float> a{1,2,0,
-					     4,5,6,
-					     0,8,9};
-	Matrix<float> A = Matrix<float>::create_matrix_from_array(a, 3, 3);
-	std::vector<float> B{8,47,60};
-
-	std::vector<float> right_solution{2, 3, 4};
-	std::vector<float> getted_solution = SolveThomasAglorithm(A,B);
-	for(int i=0; i<3; i++){
-		EXPECT_NEAR(getted_solution[i],right_solution[i], 0.0001);
-	}
-	
-	B =std::vector<float>{1,2,3};
-
-	right_solution = std::vector<float>{0.04, 0.48, -0.0933};
-    getted_solution = SolveThomasAglorithm(A,B);
-	for(int i=0; i<3; i++){
-		EXPECT_NEAR(getted_solution[i],right_solution[i], 0.0001);
-	}
-}
-
-TEST(SCRMatrixClass, CreateAndGetByIndx){
-	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	SCRMatrix<int> tested_m(doi);
-
-	EXPECT_EQ(tested_m(0,0), 1);
-	EXPECT_EQ(tested_m(0,1), 2);
-	EXPECT_EQ(tested_m(1,1), 3);
-	EXPECT_EQ(tested_m(2,2), 3);
-	EXPECT_EQ(tested_m(2,1), 0);
-}
-
-TEST(SCRMatrixClass, SCRFromRegular){
+TEST(MatrixClass, MultByVector1){
 	std::vector<int> a{1,2,0,
 					   4,5,6};
 	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 2, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
-
-	EXPECT_EQ(tested_m(0,0), 1);
-	EXPECT_EQ(tested_m(0,1), 2);
-	EXPECT_EQ(tested_m(0,2), 0);
-	EXPECT_EQ(tested_m(1,0), 4);
-	EXPECT_EQ(tested_m(1,1), 5);
-	EXPECT_EQ(tested_m(1,2), 6);
-
-}
-
-TEST(SCRMatrixClass, RegularFromSCR){
-	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	SCRMatrix<int> tested_m(doi);
-
-	Matrix<int> A = reg_matrix_from_SCR(tested_m);
-	EXPECT_EQ(A(0,0), 1);
-	EXPECT_EQ(A(0,1), 2);
-	EXPECT_EQ(A(1,1), 3);
-	EXPECT_EQ(A(2,2), 3);
-	EXPECT_EQ(A(2,1), 0);
-}
-
-TEST(SCRMatrixClass, MultByVector1){
-	std::vector<int> a{1,2,0,
-					   4,5,6};
-	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 2, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
 
 	std::vector<int> b{1,2,3};
 	std::vector<int> true_answ{5,32};
 
-	std::vector<int> getted_answ = tested_m * b;
+	std::vector<int> getted_answ = A * b;
 	EXPECT_EQ(true_answ[0], getted_answ[0]);
 	EXPECT_EQ(true_answ[1], getted_answ[1]);
 	EXPECT_EQ(true_answ.size(), getted_answ.size());
 }
-TEST(SCRMatrixClass, MultByVector2){
+
+TEST(MatrixClass, MultByVector2){
 	std::vector<int> a{1,2,0,
 					   1,2,9,
 					   7,2,0,
 					   4,5,6};
 	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 4, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
 
 	std::vector<int> b{1,2,3};
 	std::vector<int> true_answ{5,32,11,32};
 
-	std::vector<int> getted_answ = tested_m * b;
+	std::vector<int> getted_answ = A * b;
 	EXPECT_EQ(true_answ[0], getted_answ[0]);
 	EXPECT_EQ(true_answ[1], getted_answ[1]);
 	EXPECT_EQ(true_answ[2], getted_answ[2]);

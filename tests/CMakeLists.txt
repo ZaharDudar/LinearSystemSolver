@@ -2,7 +2,10 @@ include(AddGoogleTest)
 
 add_executable(
   unit_tests
-  test1.cpp
+  TestMatrix.cpp
+  TestSCRMatrix.cpp
+  TestSolving.cpp
+  TestVectorOps.cpp
 )
 target_link_libraries(
   unit_tests PRIVATE LinearSystemSolver GTest::gtest_main
