@@ -3,9 +3,9 @@
 #include <LinearSystemSolver.h>
 
 
-TEST(SCRMatrixClass, CreateAndGetByIndx){
+TEST(CSRMatrixClass, CreateAndGetByIndx){
 	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	SCRMatrix<int> tested_m(doi);
+	CSRMatrix<int> tested_m(doi);
 
 	EXPECT_EQ(tested_m(0,0), 1);
 	EXPECT_EQ(tested_m(0,1), 2);
@@ -14,11 +14,11 @@ TEST(SCRMatrixClass, CreateAndGetByIndx){
 	EXPECT_EQ(tested_m(2,1), 0);
 }
 
-TEST(SCRMatrixClass, SCRFromRegular){
+TEST(CSRMatrixClass, CSRFromRegular){
 	std::vector<int> a{1,2,0,
 					   4,5,6};
 	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 2, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
+	CSRMatrix<int> tested_m = CSRMatrix<int>::CSR_from_reg_matrix(A);
 
 	EXPECT_EQ(tested_m(0,0), 1);
 	EXPECT_EQ(tested_m(0,1), 2);
@@ -29,11 +29,11 @@ TEST(SCRMatrixClass, SCRFromRegular){
 
 }
 
-TEST(SCRMatrixClass, RegularFromSCR){
+TEST(CSRMatrixClass, RegularFromCSR){
 	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	SCRMatrix<int> tested_m(doi);
+	CSRMatrix<int> tested_m(doi);
 
-	Matrix<int> A = reg_matrix_from_SCR(tested_m);
+	Matrix<int> A = reg_matrix_from_CSR(tested_m);
 	EXPECT_EQ(A(0,0), 1);
 	EXPECT_EQ(A(0,1), 2);
 	EXPECT_EQ(A(1,1), 3);
@@ -41,11 +41,11 @@ TEST(SCRMatrixClass, RegularFromSCR){
 	EXPECT_EQ(A(2,1), 0);
 }
 
-TEST(SCRMatrixClass, MultByVector1){
+TEST(CSRMatrixClass, MultByVector1){
 	std::vector<int> a{1,2,0,
 					   4,5,6};
 	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 2, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
+	CSRMatrix<int> tested_m = CSRMatrix<int>::CSR_from_reg_matrix(A);
 
 	std::vector<int> b{1,2,3};
 	std::vector<int> true_answ{5,32};
@@ -56,13 +56,13 @@ TEST(SCRMatrixClass, MultByVector1){
 	EXPECT_EQ(true_answ.size(), getted_answ.size());
 }
 
-TEST(SCRMatrixClass, MultByVector2){
+TEST(CSRMatrixClass, MultByVector2){
 	std::vector<int> a{1,2,0,
 					   1,2,9,
 					   7,2,0,
 					   4,5,6};
 	Matrix<int> A = Matrix<int>::create_matrix_from_array(a, 4, 3);
-	SCRMatrix<int> tested_m = SCRMatrix<int>::SCR_from_reg_matrix(A);
+	CSRMatrix<int> tested_m = CSRMatrix<int>::CSR_from_reg_matrix(A);
 
 	std::vector<int> b{1,2,3};
 	std::vector<int> true_answ{5,32,11,32};

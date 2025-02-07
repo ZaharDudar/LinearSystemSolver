@@ -8,7 +8,7 @@
 
 
 template<typename T>
-class SCRMatrix
+class CSRMatrix
 {
 private:
     int nc;
@@ -17,10 +17,10 @@ private:
     std::vector<T> val;
     std::vector<int> cols;
     std::vector<int> rows;
-    SCRMatrix(){};
+    CSRMatrix(){};
 
 public:
-    SCRMatrix(std::map<std::pair<int, int>, T>);
+    CSRMatrix(std::map<std::pair<int, int>, T>);
     std::pair<int, int> shape(){ return std::make_pair(nr, nc);}
     T operator()(int r, int c){
         for(int ind=rows[r]; ind<rows[r+1]; ind++){
@@ -31,15 +31,15 @@ public:
         return (T)0;
     }
     std::vector<T> operator*(std::vector<T>B);
-    static SCRMatrix<T> SCR_from_reg_matrix(Matrix<T>);
-    ~SCRMatrix(){};
+    static CSRMatrix<T> CSR_from_reg_matrix(Matrix<T>);
+    ~CSRMatrix(){};
 };
 
 
 
 
 template<typename T>
-SCRMatrix<T>::SCRMatrix(std::map<std::pair<int, int>, T> in){
+CSRMatrix<T>::CSRMatrix(std::map<std::pair<int, int>, T> in){
     nc=0;
     nr=0;
     N_non_zero=0;
@@ -80,7 +80,7 @@ SCRMatrix<T>::SCRMatrix(std::map<std::pair<int, int>, T> in){
 }
 
 template<typename T>
-Matrix<T> reg_matrix_from_SCR(SCRMatrix<T> A){
+Matrix<T> reg_matrix_from_CSR(CSRMatrix<T> A){
     int nc = A.shape().first;
     int nr = A.shape().second;
 
@@ -100,11 +100,11 @@ Matrix<T> reg_matrix_from_SCR(SCRMatrix<T> A){
 
 
 template<typename T>
-SCRMatrix<T> SCRMatrix<T>::SCR_from_reg_matrix(Matrix<T> A){
+CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(Matrix<T> A){
     int nr = A.shape().first;
     int nc = A.shape().second;
 
-    SCRMatrix<T> tmp_matrix;
+    CSRMatrix<T> tmp_matrix;
     tmp_matrix.nc = nc;
     tmp_matrix.nr = nr;
     tmp_matrix.N_non_zero = 0;
@@ -124,7 +124,7 @@ SCRMatrix<T> SCRMatrix<T>::SCR_from_reg_matrix(Matrix<T> A){
 }
 
 template<typename T>
-std::vector<T> SCRMatrix<T>::operator*(std::vector<T>B){
+std::vector<T> CSRMatrix<T>::operator*(std::vector<T>B){
     if(this->shape().second != B.size()) {std::cout<<"lenght row != length B"; throw 1;}
     std::vector<T> result(this->shape().first);
 

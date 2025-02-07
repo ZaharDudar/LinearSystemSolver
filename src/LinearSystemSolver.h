@@ -6,7 +6,7 @@
 
 
 #include <Matrix.h>
-#include <SCRMatrix.h>
+#include <CSRMatrix.h>
 #include <VectorMath.h>
 
 

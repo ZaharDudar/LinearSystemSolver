@@ -3,7 +3,7 @@ include(AddGoogleTest)
 add_executable(
   unit_tests
   TestMatrix.cpp
-  TestSCRMatrix.cpp
+  TestCSRMatrix.cpp
   TestSolving.cpp
   TestVectorOps.cpp
 )
