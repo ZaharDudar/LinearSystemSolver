@@ -3,7 +3,9 @@
 #include <chrono>
 #include <fstream>
 
-#define N_TO_AVERAGE 100
+
+#define N_TO_AVERAGE 700
+#define TESTED_TYPE double
 
 int main(){
     std::ofstream file;
@@ -11,7 +13,7 @@ int main(){
     file<<"N_non_zero, regular, CSR\n";
 
     int MATRIX_SIZE =1000;
-    Matrix<int> regular_sparce_matrix(MATRIX_SIZE,MATRIX_SIZE);
+    Matrix<TESTED_TYPE> regular_sparce_matrix(MATRIX_SIZE,MATRIX_SIZE);
     
     for(int i=0; i<MATRIX_SIZE; i++){
         for (int j = 0; j < MATRIX_SIZE; j++)
@@ -20,15 +22,15 @@ int main(){
         }        
     }
 
-    std::vector<int> B(MATRIX_SIZE);
+    std::vector<TESTED_TYPE> B(MATRIX_SIZE);
     for(int i=0; i<MATRIX_SIZE; i++){
         B[i] = i+1;
     }
     long long int total_time=0;
     auto st = std::chrono::high_resolution_clock::now();
     auto en = std::chrono::high_resolution_clock::now();
-    std::vector<int> res1;
-    std::vector<int> res2;
+    std::vector<TESTED_TYPE> res1;
+    std::vector<TESTED_TYPE> res2;
 
 
     for(int N_non_zero = MATRIX_SIZE*MATRIX_SIZE/10; N_non_zero<=MATRIX_SIZE*MATRIX_SIZE; N_non_zero+=MATRIX_SIZE*MATRIX_SIZE/10){
@@ -50,7 +52,7 @@ int main(){
             }
         }
         
-        auto CSR_sparce_matrix = CSRMatrix<int>::CSR_from_reg_matrix(regular_sparce_matrix);
+        auto CSR_sparce_matrix = CSRMatrix<TESTED_TYPE>::CSR_from_reg_matrix(regular_sparce_matrix); 
         std::cout<<"int CSR m has "<< CSR_sparce_matrix.get_N()<<" non zero els\n";
         std::cout<<"reg mtrx\n";
         total_time=0;

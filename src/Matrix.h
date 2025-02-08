@@ -12,21 +12,21 @@ private:
 public:
     Matrix(){nc = 0; nr = 0;};
     Matrix(int nc, int nr){this->nc= nc; this->nr = nr; matrix.resize(nc*nr);};
-    std::pair<int, int> shape(){ return std::make_pair(nr, nc);}
+    std::pair<int, int> shape() const { return std::make_pair(nr, nc);}
     // T& operator()(int i, int j){ return matrix[i * nc + j];} //Проблема если где-то прописать vector.push_back(mtrx(i,j)), в вектор кажется добавится ссылка на элемент и его можно будет поменять оттуда 
-    T operator()(int i, int j){ return matrix[i * nc + j];} 
+    T operator()(int i, int j) const { return matrix[i * nc + j];} 
     void operator()(int i, int j, T set_val){ matrix[i * nc + j]=set_val;}
     std::vector<T> operator*(const std::vector<T>&);
     ~Matrix(){};
-    static Matrix<T> create_diag_matrix(std::vector<T>);
-    static Matrix<T> create_matrix_from_array(std::vector<T>, int, int);
-    static Matrix<T> create_3diag_matrix(std::vector<T>,std::vector<T>,std::vector<T>);
+    static Matrix<T> create_diag_matrix(const std::vector<T>&);
+    static Matrix<T> create_matrix_from_array(const std::vector<T>&, int, int);
+    static Matrix<T> create_3diag_matrix(const std::vector<T>&,const std::vector<T>&,const std::vector<T>&);
 
 };
 
 //Create diagonal matrix from vector
 template<typename T>
-Matrix<T> Matrix<T>::create_diag_matrix(std::vector<T> diag){
+Matrix<T> Matrix<T>::create_diag_matrix(const std::vector<T>& diag){
     Matrix<T> tmp_matrix;
     tmp_matrix.nc = diag.size();
     tmp_matrix.nr = diag.size();
@@ -42,7 +42,7 @@ Matrix<T> Matrix<T>::create_diag_matrix(std::vector<T> diag){
 
 //Create 3-diagonal matrix with main diagonal b. Essential: lenght b = lenght a + 1 = lenght c + 1 
 template<typename T>
-Matrix<T> Matrix<T>::create_3diag_matrix(std::vector<T> a , std::vector<T> b, std::vector<T> c){
+Matrix<T> Matrix<T>::create_3diag_matrix(const std::vector<T>& a ,const std::vector<T>& b,const std::vector<T>& c){
     if(a.size() != c.size() or a.size() != (b.size()-1)) {std::cout<<"Bad diagonals lenghts!"; throw 1;}
 
     Matrix<T> tmp_matrix = Matrix<T>::create_diag_matrix(b);
@@ -57,7 +57,7 @@ Matrix<T> Matrix<T>::create_3diag_matrix(std::vector<T> a , std::vector<T> b, st
 
 // Create matrix from given array with given shape
 template<typename T>
-Matrix<T> Matrix<T>::create_matrix_from_array(std::vector<T> a, int nr, int nc){
+Matrix<T> Matrix<T>::create_matrix_from_array(const std::vector<T>& a, int nr, int nc){
     if(a.size() != (nc * nr)) {std::cout<<"Bad shape!"; throw 1;}
 
     Matrix<T> tmp_matrix;

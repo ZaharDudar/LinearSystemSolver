@@ -20,10 +20,10 @@ private:
     CSRMatrix(){};
 
 public:
-    CSRMatrix(std::map<std::pair<int, int>, T>);
+    CSRMatrix(const std::map<std::pair<int, int>, T>&);
     int get_N(){return N_non_zero;}
-    std::pair<int, int> shape(){ return std::make_pair(nr, nc);}
-    T operator()(int r, int c){
+    std::pair<int, int> shape() const { return std::make_pair(nr, nc);}
+    T operator()(int r, int c) const {
         for(int ind=rows[r]; ind<rows[r+1]; ind++){
             if(cols[ind] == c){
                 return val[ind];
@@ -32,7 +32,7 @@ public:
         return (T)0;
     }
     std::vector<T> operator*(const std::vector<T>&);
-    static CSRMatrix<T> CSR_from_reg_matrix(Matrix<T>);
+    static CSRMatrix<T> CSR_from_reg_matrix(const Matrix<T>&);
     ~CSRMatrix(){};
 };
 
@@ -40,7 +40,7 @@ public:
 
 
 template<typename T>
-CSRMatrix<T>::CSRMatrix(std::map<std::pair<int, int>, T> in){
+CSRMatrix<T>::CSRMatrix(const std::map<std::pair<int, int>, T>& in){
     nc=0;
     nr=0;
     N_non_zero=0;
@@ -81,7 +81,7 @@ CSRMatrix<T>::CSRMatrix(std::map<std::pair<int, int>, T> in){
 }
 
 template<typename T>
-Matrix<T> reg_matrix_from_CSR(CSRMatrix<T> A){
+Matrix<T> reg_matrix_from_CSR(const CSRMatrix<T>& A){
     int nc = A.shape().first;
     int nr = A.shape().second;
 
@@ -101,7 +101,7 @@ Matrix<T> reg_matrix_from_CSR(CSRMatrix<T> A){
 
 
 template<typename T>
-CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(Matrix<T> A){
+CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(const Matrix<T>& A){
     int nr = A.shape().first;
     int nc = A.shape().second;
 
