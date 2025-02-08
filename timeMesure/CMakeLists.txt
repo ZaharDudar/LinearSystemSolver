@@ -1,0 +1,3 @@
+project(TimeTestMulbyVector)
+add_executable(TimeTestMulbyVector ./MulByVector.cpp)
+target_link_libraries(TimeTestMulbyVector PRIVATE LinearSystemSolver)

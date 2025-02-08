@@ -5,6 +5,11 @@ enable_testing()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+option(TIME_TESTS, OFF)
+
+if(TIME_TESTS)
+    add_subdirectory(timeMesure)
+endif()
 
 add_subdirectory(src)
 

@@ -11,11 +11,12 @@ private:
     std::vector<T> matrix;
 public:
     Matrix(){nc = 0; nr = 0;};
+    Matrix(int nc, int nr){this->nc= nc; this->nr = nr; matrix.resize(nc*nr);};
     std::pair<int, int> shape(){ return std::make_pair(nr, nc);}
     // T& operator()(int i, int j){ return matrix[i * nc + j];} //Проблема если где-то прописать vector.push_back(mtrx(i,j)), в вектор кажется добавится ссылка на элемент и его можно будет поменять оттуда 
     T operator()(int i, int j){ return matrix[i * nc + j];} 
-    T operator()(int i, int j, int set_val){ return matrix[i * nc + j]=set_val;}
-    std::vector<T> operator*(std::vector<T>B);
+    void operator()(int i, int j, T set_val){ matrix[i * nc + j]=set_val;}
+    std::vector<T> operator*(const std::vector<T>&);
     ~Matrix(){};
     static Matrix<T> create_diag_matrix(std::vector<T>);
     static Matrix<T> create_matrix_from_array(std::vector<T>, int, int);
@@ -69,7 +70,7 @@ Matrix<T> Matrix<T>::create_matrix_from_array(std::vector<T> a, int nr, int nc){
 }
 
 template<typename T>
-std::vector<T> Matrix<T>::operator*(std::vector<T>B){
+std::vector<T> Matrix<T>::operator*(const std::vector<T>& B){
     if(this->shape().second != B.size()) {std::cout<<"lenght row != length B"; throw 1;}
     std::vector<T> result(this->shape().first);
 

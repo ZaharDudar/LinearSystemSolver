@@ -21,6 +21,7 @@ private:
 
 public:
     CSRMatrix(std::map<std::pair<int, int>, T>);
+    int get_N(){return N_non_zero;}
     std::pair<int, int> shape(){ return std::make_pair(nr, nc);}
     T operator()(int r, int c){
         for(int ind=rows[r]; ind<rows[r+1]; ind++){
@@ -30,7 +31,7 @@ public:
         }
         return (T)0;
     }
-    std::vector<T> operator*(std::vector<T>B);
+    std::vector<T> operator*(const std::vector<T>&);
     static CSRMatrix<T> CSR_from_reg_matrix(Matrix<T>);
     ~CSRMatrix(){};
 };
@@ -124,7 +125,7 @@ CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(Matrix<T> A){
 }
 
 template<typename T>
-std::vector<T> CSRMatrix<T>::operator*(std::vector<T>B){
+std::vector<T> CSRMatrix<T>::operator*(const std::vector<T>& B){
     if(this->shape().second != B.size()) {std::cout<<"lenght row != length B"; throw 1;}
     std::vector<T> result(this->shape().first);
 
