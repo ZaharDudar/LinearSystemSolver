@@ -8,4 +8,4 @@
 * `CSRMatrix` - класс, в котором реализован формат хранения разреженной матрицы CSR.
 
 #### Замеры времени умножения матриц с `double` на вектор. 
-![Тест производительности](https://github.com/ZaharDudar/LinearSystemSolver/mdmaterial/Rigure_1.png)
+![Тест производительности](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_1.png)
