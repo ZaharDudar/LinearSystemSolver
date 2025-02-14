@@ -20,7 +20,7 @@ private:
     CSRMatrix(){};
 
 public:
-    CSRMatrix(const std::map<std::pair<int, int>, T>&);
+    CSRMatrix(const std::map<std::pair<int, int>, T>&,int, int);
     int get_N(){return N_non_zero;}
     std::pair<int, int> shape() const { return std::make_pair(nr, nc);}
     T operator()(int r, int c) const {
@@ -40,29 +40,30 @@ public:
 
 
 template<typename T>
-CSRMatrix<T>::CSRMatrix(const std::map<std::pair<int, int>, T>& in){
-    nc=0;
-    nr=0;
+CSRMatrix<T>::CSRMatrix(const std::map<std::pair<int, int>, T>& in, int nc, int nr){
+    this->nc=nc;
+    this->nr=nr;
     N_non_zero=0;
     rows.push_back(0);
 
-    for (auto const &el : in){
-        if(el.first.first >= nc){
-            nc = el.first.first;
-        }
-        if(el.first.second >= nr){
-            nr = el.first.second;
-        }
-    }
-    //nr and nc after cycle is maximum indxs but it has to be number in a col and in a row relative
-    nr++; 
-    nc++;
+    // for (auto const &el : in){ 
+    //     if(el.first.first >= nc){
+    //         nc = el.first.first;
+    //     }
+    //     if(el.first.second >= nr){
+    //         nr = el.first.second;
+    //     }
+    // }
+    // //nr and nc after cycle is maximum indxs but it has to be number in a col and in a row relative
+    // nr++; 
+    // nc++
 
     std::vector<T> zero_diag(nc*nr);
     for(int i=0; i<nc*nr; i++) {zero_diag[i]=0;}
 
     Matrix<T> tmp_matrix = Matrix<T>::create_matrix_from_array(zero_diag, nc, nr);
     for (auto const &el : in){
+        if(el.first.first >= nc or el.first.second >= nr){std::cout<<"Wrong shape!"; throw 1;}
         tmp_matrix(el.first.first, el.first.second, el.second);
     }
     

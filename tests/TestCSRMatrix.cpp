@@ -5,7 +5,7 @@
 
 TEST(CSRMatrixClass, CreateAndGetByIndx){
 	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	CSRMatrix<int> tested_m(doi);
+	CSRMatrix<int> tested_m(doi,3,3);
 
 	EXPECT_EQ(tested_m(0,0), 1);
 	EXPECT_EQ(tested_m(0,1), 2);
@@ -31,7 +31,7 @@ TEST(CSRMatrixClass, CSRFromRegular){
 
 TEST(CSRMatrixClass, RegularFromCSR){
 	std::map<std::pair<int, int>, int> doi={{{0,0},1},{{0,1},2},{{1,1},3},{{2,2},3}};
-	CSRMatrix<int> tested_m(doi);
+	CSRMatrix<int> tested_m(doi, 3, 3);
 
 	Matrix<int> A = reg_matrix_from_CSR(tested_m);
 	EXPECT_EQ(A(0,0), 1);
