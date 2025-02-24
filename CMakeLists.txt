@@ -6,14 +6,17 @@ enable_testing()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(TIME_TESTS, OFF)
+option(BUILD_TESTS, OFF)
 
+add_subdirectory(src)
 if(TIME_TESTS)
     add_subdirectory(timeMesure)
 endif()
 
-add_subdirectory(src)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
+
 
 # add_executable(root main.cpp)
 # target_link_libraries(root PRIVATE LinearSystemSolver)
-
-add_subdirectory(tests)

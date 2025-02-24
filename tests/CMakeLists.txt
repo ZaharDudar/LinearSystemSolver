@@ -6,6 +6,7 @@ add_executable(
   TestCSRMatrix.cpp
   TestSolving.cpp
   TestVectorOps.cpp
+  TestIterMethods.cpp
 )
 target_link_libraries(
   unit_tests PRIVATE LinearSystemSolver GTest::gtest_main

@@ -6,7 +6,7 @@
 #include <Matrix.h>
 #include <CSRMatrix.h>
 #include <VectorMath.h>
-
+#include <IterMethods.h>
 
 //FIRST IND - ROW, SECOND IND - COLUMN
 
