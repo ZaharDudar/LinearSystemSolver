@@ -34,7 +34,6 @@ public:
     std::vector<T> operator*(const std::vector<T>&) const;
     std::tuple<std::vector<T>, std::vector<int>, std::vector<int>> getRawData() const;
     static CSRMatrix<T> CSR_from_reg_matrix(const Matrix<T>&);
-    ~CSRMatrix(){};
 };
 
 

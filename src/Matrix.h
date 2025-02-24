@@ -34,7 +34,6 @@ public:
         return tmp;
     };
 
-    ~Matrix(){};
     static Matrix<T> create_eye(int n);
     static Matrix<T> create_diag_matrix(const std::vector<T>&);
     static Matrix<T> create_matrix_from_array(const std::vector<T>&, int, int);
