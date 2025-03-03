@@ -6,26 +6,24 @@
 #define TESTED_TYPE double
 
 int main(){
-    const int MATRIX_SIZE = 6;
+    const int MATRIX_SIZE = 10;
     std::vector<TESTED_TYPE> a = {
-        4, 1, 2, 0, 3, 1,
-        1, 5, 0, 2, 1, 0,
-        2, 0, 6, 1, 0, 2,
-        0, 2, 1, 7, 1, 0,
-        3, 1, 0, 1, 8, 1,
-        1, 0, 2, 0, 1, 9
-    };
-    std::vector<TESTED_TYPE> x{1,2,3,4,5,6};
-    const int N_TO_AV=50;
+        20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,1.8118954697771388,0.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.9358415547797178,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.7992690405670116,0.0,0.0,0.0,1.8118954697771388,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.9358415547797178,0.0,0.7992690405670116,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0
 
-    CSRMatrix<TESTED_TYPE> A = CSRMatrix<TESTED_TYPE>::CSR_from_reg_matrix(Matrix<TESTED_TYPE>::create_matrix_from_array(a, 6,6)); 
+    };
+    std::vector<TESTED_TYPE> x(MATRIX_SIZE);
+    for(int i=0;i<MATRIX_SIZE;i++){
+        x[i]=i;
+    }
+    const int N_TO_AV=5;
+    
+    CSRMatrix<TESTED_TYPE> A = CSRMatrix<TESTED_TYPE>::CSR_from_reg_matrix(Matrix<TESTED_TYPE>::create_matrix_from_array(a, MATRIX_SIZE, MATRIX_SIZE)); 
+    std::cout<<"checkpoint\n";
     auto b = A*x;
 
-    
     std::ofstream file;
-    file.open("./TimeIterMethods.csv");
-
-    file<<"N_iter, MPI_error, MPI_time, Yakobi_error, Yakobi_time, GaussSeidel_error, GaussSeidel_time\n";
+    file.open("./TimeSpeededMPI.csv");
+    file<<"N_iter, MPI_error, MPI_time, Speded_MPI_error, Speded_MPI_time, Yakobi_error, Yakobi_time, GaussSeidel_error, GaussSeidel_time\n";
     auto st = std::chrono::high_resolution_clock::now();
     auto en = std::chrono::high_resolution_clock::now();
     double time;
@@ -49,12 +47,25 @@ int main(){
         time = 0;
         for(int a=0; a < N_TO_AV; a++){
             st = std::chrono::high_resolution_clock::now();
+            answ = ChebSpeededPIM(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
+            for(int i=0; i<answ.size(); i++) {if(answ[i] - x[i] >= 1e-6) return 1;}
+            en = std::chrono::high_resolution_clock::now();
+            error += abs(answ - x);
+            time += std::chrono::duration_cast<std::chrono::microseconds>(en-st).count();
+        }
+        file<<error/N_TO_AV<<","<<time/N_TO_AV<<",";
+
+        error = 0;
+        time = 0;
+        for(int a=0; a < N_TO_AV; a++){
+            st = std::chrono::high_resolution_clock::now();
             answ = YakobyMethod(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
             en = std::chrono::high_resolution_clock::now();
             error += abs(answ - x);
             time += std::chrono::duration_cast<std::chrono::microseconds>(en-st).count();
         }
         file<<error/N_TO_AV<<","<<time/N_TO_AV<<",";
+
 
         error = 0;
         time = 0;

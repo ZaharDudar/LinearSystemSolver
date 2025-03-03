@@ -6,7 +6,8 @@ import numpy as np
 
 names = []
 data = []
-with open(dir_path+"/TimeIterMethods.csv", "r") as f:
+with open(dir_path+"/TimeSpeededMPI.csv", "r") as f:
+
     names = f.readline().strip().split(",")
     for line in f.readlines():
         data.append([float(i.strip()) for i in line.strip().split(",")])
