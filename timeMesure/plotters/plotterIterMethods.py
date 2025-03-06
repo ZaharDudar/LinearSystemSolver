@@ -14,7 +14,7 @@ with open(dir_path+"/TimeIterMethods.csv", "r") as f:
 data = np.array(data)
 fig, axs = plt.subplots(1, 2)
 print(names)
-for i in range(1,8,2):
+for i in range(1,6,2):
     axs[0].plot(data[:,0], data[:,i],"--", label=names[i])
     axs[1].plot(data[:,i+1], data[:,i],"--", label=names[i])
 axs[0].set_yscale("log")

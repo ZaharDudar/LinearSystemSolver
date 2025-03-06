@@ -15,9 +15,21 @@ with open(dir_path+"/TimeSpeededMPI.csv", "r") as f:
 data = np.array(data)
 fig, axs = plt.subplots(1, 2)
 print(names)
-for i in range(1,6,2):
-    axs[0].plot(data[:,0], data[:,i],"--", label=names[i])
-    axs[1].plot(data[:,i+1], data[:,i],"--", label=names[i])
+for i in range(1,8,2):
+    y = data[:,i]
+    xt = data[:,i+1]
+    x = data[:,0]
+    for dot in range(1,len(y)):
+        print(abs(y[dot]-y[dot-1]), names[i])
+        if abs(y[dot]-y[dot-1]) <= 1e-9:
+            y = data[:dot,i]
+            xt = data[:dot,i+1]
+            x = data[:dot,0]
+            break
+
+    axs[0].plot(x, y,"--", label=names[i])
+    axs[1].plot(xt, y,"--", label=names[i])
+
 axs[0].set_yscale("log")
 axs[1].set_yscale("log")
 axs[0].grid()

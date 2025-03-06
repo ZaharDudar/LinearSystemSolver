@@ -12,7 +12,7 @@ std::vector<T> PrimeIterMethod(const CSRMatrix<T>& A, const std::vector<T>& b, u
 
     for(unsigned int i=0; i<nIter; i++){
         X = X - tau * (A * X - b); 
-        if(abs(A * X - b) < epsylon){ return X;}
+        if(abs(A * X - b) <= epsylon){ return X;}
     }
     return X;
 }
@@ -44,7 +44,7 @@ std::vector<T> YakobyMethod(const CSRMatrix<T>& A, const std::vector<T>& b, unsi
             result[i] = (b[i] - tmp_sum)/diagEl;
         }
         X = result;
-        if(abs(A * X - b) < epsylon){ return X;}
+        if(abs(A * X - b) <= epsylon){ return X;}
     }
     return X;
 }
@@ -70,7 +70,7 @@ std::vector<T> GaussSeidelMethod(const CSRMatrix<T>& A, const std::vector<T>& b,
             
             X[k] = (b[k] - firstSum - secondSum)/A(k,k);
         }
-        if(abs(A * X - b) < epsylon){ return X;}
+        if(abs(A * X - b) <= epsylon){ return X;}
     }
     return X;
 }
@@ -107,7 +107,7 @@ std::vector<T> ChebSpeededPIM(const CSRMatrix<T>& A, const std::vector<T>& b, un
     for(int i=1; i<N_ROOTS; i++){
         roots[i] = roots[i-1] * cosPiN - sqrt(1-roots[i-1]*roots[i-1]) * sinPiN;
     }
-    T lambaMin = (T)1;
+    T lambaMin = (T)1.1;
     T lambaMax = FindMaxLambda(A, epsylon, 1000);
 
     for(int i=0; i<N_ROOTS; i++){
@@ -121,7 +121,7 @@ std::vector<T> ChebSpeededPIM(const CSRMatrix<T>& A, const std::vector<T>& b, un
         for(int j=0; j < N_ROOTS; j++){
             X = X - 1/roots[perm[j]] * (A * X - b); 
         }
-        if(abs(A * X - b) < epsylon){ return X;}
+        if(abs(A * X - b) <= epsylon){ return X;}
     }
     return X;
 }
