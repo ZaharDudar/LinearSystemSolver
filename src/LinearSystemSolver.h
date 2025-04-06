@@ -7,6 +7,11 @@
 #include <CSRMatrix.h>
 #include <VectorMath.h>
 #include <IterMethods.h>
+#include <GradientDescent.h>
+
+//Here:
+// Thomas algorithm for three-diagonal mtrx, householder algorithm and solver based on QR decomp 
+
 
 //FIRST IND - ROW, SECOND IND - COLUMN
 

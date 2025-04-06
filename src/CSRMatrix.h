@@ -127,7 +127,6 @@ CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(const Matrix<T>& A){
 
 template<typename T>
 std::vector<T> CSRMatrix<T>::operator*(const std::vector<T>& B) const{
-    if(this->shape().second != B.size()) {std::cout<<"lenght row != length B"; throw 1;}
     std::vector<T> result(this->shape().first);
 
     T tmp_sum=0;

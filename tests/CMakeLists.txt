@@ -8,6 +8,7 @@ add_executable(
   TestVectorOps.cpp
   TestIterMethods.cpp
 )
+
 target_link_libraries(
   unit_tests PRIVATE LinearSystemSolver GTest::gtest_main
 )

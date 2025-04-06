@@ -6,10 +6,10 @@ import numpy as np
 
 names = []
 data = []
-with open(dir_path+"/TimeMethods.csv", "r") as f:
+with open(dir_path+"/SORvsOmega.csv", "r") as f:
     names = f.readline().strip().split(",")
     for line in f.readlines():
-        data.append([float(i.strip()) for i in line.strip().split(",")])
+        data.append([float(i.strip()) for i in line.strip().split(",")[:-1]])
 
 data = np.array(data)
 fig, axs = plt.subplots(1, 2)

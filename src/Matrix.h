@@ -19,6 +19,7 @@ public:
     std::vector<T> operator*(const std::vector<T>&);
     Matrix<T> operator*(const Matrix<T>&);
 
+
     std::vector<T> get_col(int j_col);
     std::vector<T> get_col(int j_col, int st_id, int end_id);
     std::vector<T> get_row(int i_row);
@@ -116,6 +117,7 @@ std::vector<T> Matrix<T>::operator*(const std::vector<T>& B){
     return result;
 }
 
+
 template<typename T>
 std::ostream& operator<<(std::ostream& str,const Matrix<T>& A){
     int m = A.shape().first;
@@ -147,6 +149,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& B){
     }
     return result;
 }
+
 
 template<typename T>
 std::vector<T> Matrix<T>::get_col(int j_col){

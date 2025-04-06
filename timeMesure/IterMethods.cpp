@@ -49,7 +49,7 @@ int main(){
         time = 0;
         for(int a=0; a < N_TO_AV; a++){
             st = std::chrono::high_resolution_clock::now();
-            answ = YakobyMethod(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
+            answ = JacobiMethod(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
             en = std::chrono::high_resolution_clock::now();
             error += abs(answ - x);
             time += std::chrono::duration_cast<std::chrono::microseconds>(en-st).count();

@@ -3,7 +3,8 @@
 #include <Matrix.h>
 #include <VectorMath.h>
 #include <CSRMatrix.h>
-
+// Here:
+// Prime Iter Method, Jacobi Method, Gauss-Seidel Method, Symmetric GS Method, Chebyshev boosting PIM
 
 template<typename T>
 std::vector<T> PrimeIterMethod(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0){
@@ -18,7 +19,7 @@ std::vector<T> PrimeIterMethod(const CSRMatrix<T>& A, const std::vector<T>& b, u
 }
 
 template<typename T>
-std::vector<T> YakobyMethod(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0){
+std::vector<T> JacobiMethod(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0){
     std::vector<T> X = x0;
 
     std::vector<T> val;
@@ -75,6 +76,53 @@ std::vector<T> GaussSeidelMethod(const CSRMatrix<T>& A, const std::vector<T>& b,
     return X;
 }
 
+template<typename T>
+std::vector<T> SymmetricGSMethod(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0){
+    std::vector<T> X = x0;
+    std::vector<T> bUX = x0;
+    std::vector<T> bLX = x0;
+    int n = x0.size();
+
+    T tmpSum=0;
+    for(unsigned int iter=0; iter < nIter; iter++){
+        //Iteration 1/2
+        for(int i = 0; i < n; i++){
+            tmpSum = 0;
+            for(int j = i+1; j < n; j++){
+                tmpSum += A(i, j) * X[j];
+            }
+            bUX[i] = b[i] - tmpSum;
+        }
+        X[0] = bUX[0]/A(0, 0);
+        for(int i=1; i < n; i++){
+            tmpSum = bUX[i];    
+            for(int j=0; j<i; j++){
+                tmpSum -= A(i,j) * X[j];
+            }
+            X[i] = tmpSum/A(i,i);
+        }
+
+        // Iteration 1
+        for(int i = 0; i < n; i++){
+            tmpSum = 0;
+            for(int j = 0; j < i; j++){
+                tmpSum += A(i, j) * X[j];
+            }
+            bLX[i] = b[i] - tmpSum;
+        }
+        X[n-1] = bLX[n-1]/A(n-1, n-1);
+        for(int i=n-2; i >= 0; i--){
+            tmpSum = bLX[i];    
+            for(int j=i+1; j < n; j++){
+                tmpSum -= A(i,j) * X[j];
+            }
+            X[i] = tmpSum/A(i,i);
+        }
+        if(abs(A * X - b) <= epsylon){ return X;}
+    }
+    return X;
+}
+
 
 template<typename T>
 T FindMaxLambda(const CSRMatrix<T>& A, T epsylon, unsigned int nIter){
@@ -90,6 +138,94 @@ T FindMaxLambda(const CSRMatrix<T>& A, T epsylon, unsigned int nIter){
         Lastlambda=lambda;
     }
     return lambda;
+}
+
+template<typename T>
+std::vector<T> SOR(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0){
+    std::vector<T> X = x0;
+    int n = x0.size();
+
+    T firstSum = 0;
+    T secondSum = 0;
+    
+    Matrix<T> DA(n,n);
+    
+    for(int i=0; i < n; i++){
+        for(int j=0; j < n; j++){
+            if(i==j){
+                DA(i, j, 1 - A(i,j) / A(i,i));
+            }
+            else{
+                DA(i, j, A(i,j) / A(i,i));
+            }
+        }
+    }
+    
+    T mu = FindMaxLambda(CSRMatrix<T>::CSR_from_reg_matrix(DA), epsylon, nIter);
+    T omega = 1 + pow((mu / (1 + (T)sqrt(1-mu*mu))), 2);
+
+    for(unsigned int iter=0; iter < nIter; iter++){
+        for(int k=0; k<n; k++){
+
+            firstSum = 0;
+            secondSum = 0;
+
+            for(int j = k+1; j < n; j++){
+                firstSum += A(k, j) * X[j];
+            }
+            for(int j = 0; j < k; j++){
+                secondSum += A(k, j) * X[j];
+            }
+            
+            X[k] = (1-omega)*X[k] + omega*(b[k] - firstSum - secondSum)/A(k,k);
+        }
+        if(abs(A * X - b) <= epsylon){ return X;}
+    }
+    return X;
+}
+
+template<typename T>
+std::vector<T> SOR(const CSRMatrix<T>& A, const std::vector<T>& b, unsigned int nIter, T epsylon, const std::vector<T> x0, T omega){
+    std::vector<T> X = x0;
+    int n = x0.size();
+
+    T firstSum = 0;
+    T secondSum = 0;
+    
+    Matrix<T> DA(n,n);
+    
+    for(int i=0; i < n; i++){
+        for(int j=0; j < n; j++){
+            if(i==j){
+                DA(i, j, 1 - A(i,j) / A(i,i));
+            }
+            else{
+                DA(i, j, A(i,j) / A(i,i));
+            }
+        }
+    }
+    
+    // T mu = FindMaxLambda(CSRMatrix<T>::CSR_from_reg_matrix(DA), epsylon, nIter);
+    // T omega = 1 + pow((mu / (1 + (T)sqrt(1-mu*mu))), 2);
+
+    for(unsigned int iter=0; iter < nIter; iter++){
+        for(int k=0; k<n; k++){
+
+            firstSum = 0;
+            secondSum = 0;
+
+            for(int j = k+1; j < n; j++){
+                firstSum += A(k, j) * X[j];
+            }
+            for(int j = 0; j < k; j++){
+                secondSum += A(k, j) * X[j];
+            }
+            
+            X[k] = (1-omega)*X[k] + omega*(b[k] - firstSum - secondSum)/A(k,k);
+        }
+        if(abs(A * X - b) <= epsylon){ return X;}
+    }
+    return X;
 }
 
 std::vector<int> getPerms(int r, std::vector<int> in);
