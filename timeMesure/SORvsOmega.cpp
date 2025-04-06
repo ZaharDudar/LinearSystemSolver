@@ -5,7 +5,7 @@
 
 #define TESTED_TYPE double
 
-TESTED_TYPE get_omega(int omega){return omega*0.2+0.6;}
+TESTED_TYPE get_omega(int omega){return omega*0.1+1;}
 
 int main(){
     const int MATRIX_SIZE = 10;
@@ -28,10 +28,12 @@ int main(){
     file.open("./SORvsOmega.csv");
     file<<"N_iter,";
     std::cout<<"checkpoint\n";
-    for(int omega = 0; omega<MAX_OMEGA_INT; omega++){
+    for(int omega = 0; omega<=MAX_OMEGA_INT; omega++){
         file<<"SOR_"<<get_omega(omega)<<"_error,";
         file<<"SOR_"<<get_omega(omega)<<"_time,";
     }
+    file<<"SOR_optimal_error,";
+    file<<"SOR_optimal_time,";
     file<<"\n";
     auto st = std::chrono::high_resolution_clock::now();
     auto en = std::chrono::high_resolution_clock::now();
@@ -40,7 +42,7 @@ int main(){
     double error;
     for(int NIter = 1; NIter <= 1000; NIter+=1){
         file<<NIter<<",";
-        for(int omega = 0; omega<MAX_OMEGA_INT; omega++){
+        for(int omega = 0; omega<=MAX_OMEGA_INT; omega++){
 
             error = 0;
             time = 0;
@@ -53,6 +55,16 @@ int main(){
             }
             file<<error/N_TO_AV<<","<<time/N_TO_AV<<",";             
         }
+        error = 0;
+        time = 0;
+        for(int a=0; a < N_TO_AV; a++){
+            st = std::chrono::high_resolution_clock::now();
+            answ = SOR(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
+            en = std::chrono::high_resolution_clock::now();
+            error += abs(answ - x);
+            time += std::chrono::duration_cast<std::chrono::microseconds>(en-st).count();
+        }
+        file<<error/N_TO_AV<<","<<time/N_TO_AV<<",";  
         file<<"\n";
     }
     file.close();
