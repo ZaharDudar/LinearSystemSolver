@@ -8,6 +8,8 @@
 #include <VectorMath.h>
 #include <IterMethods.h>
 #include <GradientDescent.h>
+#include <functional>
+#include <utility>
 
 //Here:
 // Thomas algorithm for three-diagonal mtrx, householder algorithm and solver based on QR decomp 
@@ -131,4 +133,20 @@ std::vector<T> solve_by_QR(const Matrix<T>& Q, const Matrix<T>& R, const std::ve
         x[i] = b[i]/res(i,i);
     }
     return x;
+}
+
+
+// Step - is a function that makes one iteration of your method
+template<typename T>
+std::vector<T> universalChebBoost(std::function<std::vector<T>(CSRMatrix<T>&,std::vector<T>&,std::vector<T>&)> step, CSRMatrix<T> &A, std::vector<T> &b, int nIter, T epsilon, std::vector<T> x0){
+    std::vector<T> y0 = x0;
+    std::vector<T> y1 = step(A, b, x0);
+    T rho = abs(step(A, b, y1) - y1) / abs(y1 - x0);
+    T w = 2 / (2-rho*rho);
+    for(int iter=0; iter<nIter; iter++){
+        y0 = std::exchange(y1, w * (step(A, b, y1) - y0) + y0);
+        w = 1 / (1 - rho * rho * w / 4);
+        if(abs(A*y1 - b)<=epsilon) {return y1;}
+    }
+    return y1;
 }

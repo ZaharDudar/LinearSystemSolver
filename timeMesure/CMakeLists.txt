@@ -10,3 +10,6 @@ target_link_libraries(TimeTestSpeededMPI PRIVATE LinearSystemSolver)
 
 add_executable(TestSORagainstOmega ./SORvsOmega.cpp)
 target_link_libraries(TestSORagainstOmega PRIVATE LinearSystemSolver)
+
+add_executable(TestUniversalBoost ./UniversalBoost.cpp)
+target_link_libraries(TestUniversalBoost PRIVATE LinearSystemSolver)

@@ -20,3 +20,6 @@
 ![Тест SOR](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_5.png)
 
 Оптимальной омегой расчитанной по формуле оказалось 1.0245, видно, что при этом значении метод сходится быстрее всего.
+
+#### Универсальное ускорение Чебышего
+![Тест универсального ускорения](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_6.png)
