@@ -128,13 +128,14 @@ template<typename T>
 T FindMaxLambda(const CSRMatrix<T>& A, T epsylon, unsigned int nIter){
     std::vector<T> r = std::vector<T>(A.shape().first);
     r[0]=1;
+    r[1] =9;
     T lambda;
     T Lastlambda;
     for(int iter=0; iter<nIter; iter++){
         r = A*r;
         r = r * (1 / abs(r));
         lambda = r * (A * r) / (r * r);
-        if(abs(lambda-Lastlambda) <= epsylon) {return lambda;}
+        if(std::abs(lambda-Lastlambda) <= epsylon) {return lambda;}
         Lastlambda=lambda;
     }
     return lambda;

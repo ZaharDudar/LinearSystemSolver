@@ -6,36 +6,58 @@
 #define TESTED_TYPE double
 
 int main(){
-    const int MATRIX_SIZE = 100;
-    std::vector<TESTED_TYPE> a;
+    const int MATRIX_SIZE = 256;
+    std::map<std::pair<int, int>, TESTED_TYPE> a;
     std::ifstream inputFile;
-    inputFile.open("./matrix.txt");
+    inputFile.open("./256x256matrixDOK.txt");
     std::string str;
     std::string tmpStr;
     std::cout<<"read file\n";
+    int iIn,jIn, tmpi;
+    TESTED_TYPE valIn;
     while (std::getline(inputFile, str))
     {
         for(int i=0; i< str.length(); i++){
-            if(str[i] == ',' or str[i] == '\n'){
-                a.push_back(std::stoi(tmpStr));
+            if(str[i] == ','){
+                iIn = std::stoi(tmpStr);
+                tmpi=i;
                 tmpStr.clear();
+                break;
             }
-            else{
-                tmpStr += str[i];
-            }
+            tmpStr+=str[i];
         }
+        tmpStr.clear();
+        for(int i=tmpi+1; i< str.length(); i++){
+            if(str[i] == ','){
+                jIn = std::stoi(tmpStr);
+                tmpi=i;
+                tmpStr.clear();
+                break;
+            }
+            tmpStr+=str[i];
+        }
+        tmpStr.clear();
+        
+        for(int i=tmpi+1; i< str.length(); i++){
+            tmpStr+=str[i];
+        }
+        valIn = std::stod(tmpStr);
+        a[std::make_pair(iIn, jIn)] = valIn;
+        tmpStr.clear();
     }  
-    a.push_back(std::stoi(tmpStr));
     inputFile.close();
 
     std::vector<TESTED_TYPE> x(MATRIX_SIZE);
     for(int i=0;i<MATRIX_SIZE;i++){
-        x[i]=i;
+        x[i]=i+1;
     }
-    const int N_TO_AV=1;
+    const int N_TO_AV=10;
     
     std::cout<<"load matrix\n";
-    CSRMatrix<TESTED_TYPE> A = CSRMatrix<TESTED_TYPE>::CSR_from_reg_matrix(Matrix<TESTED_TYPE>::create_matrix_from_array(a, MATRIX_SIZE, MATRIX_SIZE)); 
+    CSRMatrix<TESTED_TYPE> A(a,MATRIX_SIZE,MATRIX_SIZE);
+    // CSRMatrix<TESTED_TYPE> A = CSRMatrix<TESTED_TYPE>::CSR_from_reg_matrix(Matrix<TESTED_TYPE>::create_matrix_from_array(a, MATRIX_SIZE, MATRIX_SIZE)); 
+    std::cout<< reg_matrix_from_CSR(A);
+    std::cout<< "max lambda= "<<FindMaxLambda(A,1e-14,500)<<"\n";
     std::cout<<"compute b\n";
     auto b = A*x;
     
@@ -49,8 +71,9 @@ int main(){
     std::vector<TESTED_TYPE> answ;
     double error;
     std::cout<<"start writing\n";
-    for(int NIter = 1; NIter <= 1000; NIter+=1){
-        if(NIter%10==0){std::cout<<((float)NIter/(float)1000 * (float)100)<<"%\n";}
+    for(int NIter = 1; NIter <= 500; NIter+=1){
+        if(NIter%10==0){std::cout<<((float)NIter/(float)500 * (float)100)<<"%\n";}
+        // std::cout<<((float)NIter/(float)1000 * (float)100)<<"%\n";
         file<<NIter<<",";
 
         //Jacobi
@@ -60,6 +83,7 @@ int main(){
             st = std::chrono::high_resolution_clock::now();
             answ = JacobiMethod(A, b, NIter, 1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));
             en = std::chrono::high_resolution_clock::now();
+            // std::cout<<answ<<"\n";
             error += abs(answ - x);
             time += std::chrono::duration_cast<std::chrono::microseconds>(en-st).count();
         }
@@ -72,7 +96,7 @@ int main(){
             auto step = [](CSRMatrix<TESTED_TYPE> &A, std::vector<TESTED_TYPE> &b, std::vector<TESTED_TYPE> &x0) { return JacobiMethod(A, b, 1, (TESTED_TYPE)1e-7, x0);};
             
             st = std::chrono::high_resolution_clock::now();
-            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(6));    
+            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));    
             en = std::chrono::high_resolution_clock::now();
             
             error += abs(answ - x);
@@ -99,7 +123,7 @@ int main(){
             auto step = [](CSRMatrix<TESTED_TYPE> &A, std::vector<TESTED_TYPE> &b, std::vector<TESTED_TYPE> &x0) { return GaussSeidelMethod(A, b, 1, (TESTED_TYPE)1e-7, x0);};
             
             st = std::chrono::high_resolution_clock::now();
-            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(6));    
+            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));    
             en = std::chrono::high_resolution_clock::now();
             
             error += abs(answ - x);
@@ -126,7 +150,7 @@ int main(){
             auto step = [](CSRMatrix<TESTED_TYPE> &A, std::vector<TESTED_TYPE> &b, std::vector<TESTED_TYPE> &x0) { return SymmetricGSMethod(A, b, 1, (TESTED_TYPE)1e-7, x0);};
             
             st = std::chrono::high_resolution_clock::now();
-            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(6));    
+            answ = universalChebBoost<TESTED_TYPE>(step, A, b, NIter, (TESTED_TYPE)1e-7, std::vector<TESTED_TYPE>(MATRIX_SIZE));    
             en = std::chrono::high_resolution_clock::now();
             
             error += abs(answ - x);

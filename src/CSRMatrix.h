@@ -58,20 +58,20 @@ CSRMatrix<T>::CSRMatrix(const std::map<std::pair<int, int>, T>& in, int nc, int 
     // nr++; 
     // nc++
 
-    std::vector<T> zero_diag(nc*nr);
-    for(int i=0; i<nc*nr; i++) {zero_diag[i]=0;}
+    // std::vector<T> zero_diag(nc*nr);
+    // for(int i=0; i<nc*nr; i++) {zero_diag[i]=0;}
 
-    Matrix<T> tmp_matrix = Matrix<T>::create_matrix_from_array(zero_diag, nc, nr);
-    for (auto const &el : in){
-        if(el.first.first >= nc or el.first.second >= nr){std::cout<<"Wrong shape!"; throw 1;}
-        tmp_matrix(el.first.first, el.first.second, el.second);
-    }
+    // Matrix<T> tmp_matrix = Matrix<T>::create_matrix_from_array(zero_diag, nc, nr);
+    // for (auto const &el : in){
+    //     if(el.first.first >= nc or el.first.second >= nr){std::cout<<"Wrong shape!"; throw 1;}
+    //     tmp_matrix(el.first.first, el.first.second, el.second);
+    // }
     
     
     for(int i=0; i<nr; i++){
         for(int j=0; j<nc; j++){
-            if(tmp_matrix(i,j)!=0){
-                val.push_back(tmp_matrix(i,j));
+            if(in.count(std::make_pair(i,j))!=0){
+                val.push_back(in.at(std::make_pair(i,j)));
                 cols.push_back(j);
                 N_non_zero++;
             }
@@ -83,14 +83,10 @@ CSRMatrix<T>::CSRMatrix(const std::map<std::pair<int, int>, T>& in, int nc, int 
 
 template<typename T>
 Matrix<T> reg_matrix_from_CSR(const CSRMatrix<T>& A){
-    int nc = A.shape().first;
-    int nr = A.shape().second;
+    int nr = A.shape().first;
+    int nc = A.shape().second;
 
-
-    std::vector<T> zero_diag(nc*nr);
-    for(int i=0; i<nc*nr; i++) {zero_diag[i]=0;}
-
-    Matrix<T> tmp_matrix = Matrix<T>::create_diag_matrix(zero_diag);
+    Matrix<T> tmp_matrix(nr, nc);
 
     for(int i=0; i<nr; i++){
         for(int j=0; j<nr; j++){

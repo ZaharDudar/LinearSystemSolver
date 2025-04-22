@@ -141,7 +141,8 @@ template<typename T>
 std::vector<T> universalChebBoost(std::function<std::vector<T>(CSRMatrix<T>&,std::vector<T>&,std::vector<T>&)> step, CSRMatrix<T> &A, std::vector<T> &b, int nIter, T epsilon, std::vector<T> x0){
     std::vector<T> y0 = x0;
     std::vector<T> y1 = step(A, b, x0);
-    T rho = abs(step(A, b, y1) - y1) / abs(y1 - x0);
+    // T rho = abs(step(A, b, y1) - y1) / abs(y1 - x0);
+    T rho = FindMaxLambda(A, epsilon, 1000);
     T w = 2 / (2-rho*rho);
     for(int iter=0; iter<nIter; iter++){
         y0 = std::exchange(y1, w * (step(A, b, y1) - y0) + y0);

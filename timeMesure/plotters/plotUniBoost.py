@@ -14,9 +14,15 @@ with open(dir_path+"/UniversalBoost.csv", "r") as f:
 data = np.array(data)
 fig, axs = plt.subplots(1, 2)
 print(names)
+flag=True
 for i in range(1,len(names)-1,2):
-    axs[0].plot(data[np.where(data[:,i]>1e-7)][:,0], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))
-    axs[1].plot(data[np.where(data[:,i]>1e-7)][:,i+1], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))
+    if flag:
+        axs[0].plot(data[np.where(data[:,i]>1e-7)][:,0], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))
+        axs[1].plot(data[np.where(data[:,i]>1e-7)][:,i+1], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))
+    else:
+        axs[0].plot(data[np.where(data[:,i]>1e-7)][:,0], data[np.where(data[:,i]>1e-7)][:,i],"-.", label=" ".join(names[i].split("_")[:-1]))
+        axs[1].plot(data[np.where(data[:,i]>1e-7)][:,i+1], data[np.where(data[:,i]>1e-7)][:,i],"-.", label=" ".join(names[i].split("_")[:-1]))
+    flag=not flag
     
 axs[0].set_yscale("log")
 axs[1].set_yscale("log")

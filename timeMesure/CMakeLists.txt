@@ -7,9 +7,11 @@ target_link_libraries(TimeTestIterMethods PRIVATE LinearSystemSolver)
 
 add_executable(TimeTestSpeededMPI ./SpeededMPI&others.cpp)
 target_link_libraries(TimeTestSpeededMPI PRIVATE LinearSystemSolver)
+target_compile_options(TimeTestSpeededMPI PRIVATE -O3)
 
 add_executable(TestSORagainstOmega ./SORvsOmega.cpp)
 target_link_libraries(TestSORagainstOmega PRIVATE LinearSystemSolver)
 
 add_executable(TestUniversalBoost ./UniversalBoost.cpp)
 target_link_libraries(TestUniversalBoost PRIVATE LinearSystemSolver)
+target_compile_options(TestUniversalBoost PRIVATE -O3)
