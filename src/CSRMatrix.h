@@ -34,6 +34,9 @@ public:
     std::vector<T> operator*(const std::vector<T>&) const;
     std::tuple<std::vector<T>, std::vector<int>, std::vector<int>> getRawData() const;
     static CSRMatrix<T> CSR_from_reg_matrix(const Matrix<T>&);
+
+    //Slow & Ugly.
+    CSRMatrix<T> transpose() const;
 };
 
 
@@ -139,4 +142,15 @@ std::vector<T> CSRMatrix<T>::operator*(const std::vector<T>& B) const{
 template<typename T>
 std::tuple<std::vector<T>, std::vector<int>, std::vector<int>> CSRMatrix<T>::getRawData() const {
     return std::make_tuple(val, cols, rows);
+}
+
+template<typename T>
+CSRMatrix<T> CSRMatrix<T>::transpose() const {
+    Matrix<T> tmp(this->nr, this->nc);
+    for(unsigned int i=0; i<this->nr; i++){
+        for(unsigned int j=0; j<this->nr; j++){
+            tmp(j, i, (*this)(i,j));
+        }
+    }
+    return CSR_from_reg_matrix(tmp);
 }

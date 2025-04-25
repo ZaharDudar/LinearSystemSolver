@@ -22,4 +22,13 @@
 Оптимальной омегой расчитанной по формуле оказалось 1.0245, видно, что при этом значении метод сходится быстрее всего.
 
 #### Универсальное ускорение Чебышего
+Измерения проводились на эллиптической матрице 256 на 256.
 ![Тест универсального ускорения](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_6.png)
+
+#### Методы CG, BiCG, CGS
+Измерения проводились на эллиптической матрице 256 на 256.
+![Тест градиентных методов](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_7.png)
+
+#### Методы BiCG и CGS на несиметричных матрицах
+Измерения проводились матрице с заполнением 50 процентов размером 256 на 256.
+![Тест градиентных методов на не сим. матрицах](https://github.com/ZaharDudar/LinearSystemSolver/blob/main/mdmaterial/Figure_8.png)

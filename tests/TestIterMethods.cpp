@@ -77,22 +77,7 @@ TEST(IterMethods, SpeededPrimeIter_Method){
 	}
 }
 
-TEST(GradientDescent, SteepestGradientDescent){
-	std::vector<double> a{3,2,2,
-		1,3,1,
-		2,1,3};
-	std::vector<double> X{1,2,3};
-	std::vector<std::pair<std::pair<int, int>, std::vector<double>>> tests{{{3,3},a}};
 
-	for(auto &test : tests){
-		CSRMatrix<double> A = CSRMatrix<double>::CSR_from_reg_matrix(Matrix<double>::create_matrix_from_array(test.second, test.first.first, test.first.second));
-		auto B = A * X;
-		auto getted_answ = SteepestGradientDescent(A, B, 10000, (double)1e-7, std::vector<double>(3));
-		for(int i=0; i<3; i++){
-			EXPECT_NEAR(X[i], getted_answ[i], 0.0001);
-		}
-	}
-}
 
 TEST(IterMethods, SuccessiveOverRelaxation){
     std::vector<float> a = {
@@ -141,9 +126,9 @@ TEST(IterMethods, SymmetricGSMethod){
 }
 
 TEST(UniversalBoost, PrimeIter_Method){
-	std::vector<double> a{3,2,2,
-			1,3,1,
-			2,1,3};
+	std::vector<double> a{	3,1,2,
+							1,3,1,
+							2,1,3};
 	std::vector<double> X{1,2,3};
 	std::vector<std::pair<std::pair<int, int>, std::vector<double>>> tests{{{3,3},a}};
 

@@ -6,7 +6,7 @@ import numpy as np
 
 names = []
 data = []
-with open(dir_path+"/UniversalBoost.csv", "r") as f:
+with open(dir_path+"/CG-BiCG-CGS-Sym.csv", "r") as f:
     names = f.readline().strip().split(",")
     for line in f.readlines():
         data.append([float(i.strip()) for i in line.strip().split(",")])
@@ -16,10 +16,8 @@ fig, axs = plt.subplots(1, 2)
 print(names)
 flag=True
 for i in range(1,len(names)-1,2):
-    filteredData = data[np.where(np.abs(data[:,i+1])<1e6)]
-    # print(filteredData[69,7])
-    # print(data[69,7])
-    # print("____")
+    filteredData = data[np.where((np.abs(data[:,i+1])<1e6)&(data[:,i]>1e-7))]
+
     if flag:
         axs[0].plot(data[np.where(data[:,i]>1e-7)][:,0], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))
         # axs[1].plot(data[np.where(data[:,i]>1e-7)][:,i+1], data[np.where(data[:,i]>1e-7)][:,i],"--", label=" ".join(names[i].split("_")[:-1]))

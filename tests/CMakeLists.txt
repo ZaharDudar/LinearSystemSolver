@@ -7,6 +7,7 @@ add_executable(
   TestSolving.cpp
   TestVectorOps.cpp
   TestIterMethods.cpp
+  TestGradientMethods.cpp
 )
 
 target_link_libraries(
