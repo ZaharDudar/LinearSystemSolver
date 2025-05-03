@@ -4,6 +4,8 @@
 
 
 #include <Matrix.h>
+#include <GMRES.h>
+#include <ColMajMatrix.h>
 #include <CSRMatrix.h>
 #include <VectorMath.h>
 #include <IterMethods.h>

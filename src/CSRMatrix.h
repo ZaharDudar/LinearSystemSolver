@@ -32,6 +32,7 @@ public:
         return (T)0;
     }
     std::vector<T> operator*(const std::vector<T>&) const;
+    std::vector<T> operator*(const std::span<T>&) const;
     std::tuple<std::vector<T>, std::vector<int>, std::vector<int>> getRawData() const;
     static CSRMatrix<T> CSR_from_reg_matrix(const Matrix<T>&);
 
@@ -126,6 +127,21 @@ CSRMatrix<T> CSRMatrix<T>::CSR_from_reg_matrix(const Matrix<T>& A){
 
 template<typename T>
 std::vector<T> CSRMatrix<T>::operator*(const std::vector<T>& B) const{
+    std::vector<T> result(this->shape().first);
+
+    T tmp_sum=0;
+    for(int i=0; i<this->shape().first; i++){
+        tmp_sum = 0;
+        for(int j=this->rows[i]; j<this->rows[i+1]; j++){
+            tmp_sum += this->val[j] * B[cols[j]];
+        }
+        result[i] = tmp_sum;
+    }
+    return result;
+}
+
+template<typename T>
+std::vector<T> CSRMatrix<T>::operator*(const std::span<T>& B) const{
     std::vector<T> result(this->shape().first);
 
     T tmp_sum=0;

@@ -93,9 +93,7 @@ Matrix<T> Matrix<T>::create_matrix_from_array(const std::vector<T>& a, int nr, i
     if(a.size() != (nc * nr)) {std::cout<<"Bad shape!" <<a.size(); throw std::length_error(std::to_string(a.size()) + " != " + std::to_string(nc * nr));}
 
     Matrix<T> tmp_matrix;
-    for(int i=0; i<nc*nr; i++){
-        tmp_matrix.matrix = a;
-    }
+    tmp_matrix.matrix = a;
     tmp_matrix.nc = nc;
     tmp_matrix.nr = nr;
     return tmp_matrix;

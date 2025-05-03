@@ -8,6 +8,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 option(TIME_TESTS, OFF)
 option(BUILD_TESTS, OFF)
 
+set(CMAKE_CXX_STANDARD 20)
+
 add_subdirectory(src)
 if(TIME_TESTS)
     add_subdirectory(timeMesure)
