@@ -19,6 +19,7 @@ public:
     T operator()(int i, int j) const { return matrix[i + j * nr];} 
     void operator()(int i, int j, T set_val){ matrix[i + j * nr]=set_val;}
     std::vector<T> operator*(const std::vector<T>&);
+    std::vector<T> partly_mul(const std::vector<T>&);
     ColMajMatrix<T> operator*(const ColMajMatrix<T>&);
 
 
@@ -120,7 +121,19 @@ std::vector<T> ColMajMatrix<T>::operator*(const std::vector<T>& B){
     }
     return result;
 }
+template<typename T>
+std::vector<T> ColMajMatrix<T>::partly_mul(const std::vector<T>& B){
+    std::vector<T> result(this->shape().first);
 
+    T tmp_sum=0;
+    for(int j=0; j<B.size(); j++){
+        tmp_sum = 0;
+        for(int i=0; i<this->shape().first; i++){
+            result[i] += (*this)(i,j) * B[j];
+        }
+    }
+    return result;
+}
 
 template<typename T>
 std::ostream& operator<<(std::ostream& str,const ColMajMatrix<T>& A){

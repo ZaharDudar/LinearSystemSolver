@@ -12,7 +12,7 @@ TEST(GMRES, FirstTest){
 	for(auto &test : tests){
 		CSRMatrix<double> A = CSRMatrix<double>::CSR_from_reg_matrix(Matrix<double>::create_matrix_from_array(test.second, test.first.first, test.first.second));
 		auto B = A * X;
-		auto getted_answ = GMRES(A, B, 1000, (double)1e-7, std::vector<double>(3));
+		auto getted_answ = GMRES(A, B, 1000, 20, (double)1e-7, std::vector<double>(3));
 		for(int i=0; i<3; i++){
 			EXPECT_NEAR(X[i], getted_answ[i], 0.0001);
 		}
